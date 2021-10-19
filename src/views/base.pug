@@ -11,6 +11,8 @@ html(lang="ko")
         else
             title #{siteName}
     body
+        include partials/header
         mian
             block content
+        include partials/footer
         script(src="https://kit.fontawesome.com/baa94097a5.js" crossorigin="anonymous")
