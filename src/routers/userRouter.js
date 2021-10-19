@@ -2,9 +2,9 @@ import express from "express";
 
 const userRouter = express.Router();
 
-userRouter.get("/:id");
+userRouter.get("/:id(\\+d)");
 userRouter.get("/edit");
-userRouter.get("/:id/change-password");
+userRouter.get("/:id(\\+d)/change-password");
 userRouter.get("/logout");
 
 export default userRouter;
