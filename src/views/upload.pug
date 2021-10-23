@@ -1,4 +1,8 @@
 extends base
 
 block content
-    span join
+    if errMsg
+        span=errMsg
+    form(method="post" enctype="multipart/form-data")
+        label(for="video") Video File
+        input#video(type="file", name="video" accept="video/*")

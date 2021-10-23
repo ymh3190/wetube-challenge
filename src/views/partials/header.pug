@@ -1,2 +1,10 @@
 header.header
-    span header
+    nav
+        li
+            a(href="/") 홈 
+        if !loggedIn
+            li
+                a(href="/signin") 로그인
+        else
+            li
+                a(href="/users/logout") 로그아웃
