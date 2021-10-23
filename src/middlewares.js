@@ -11,17 +11,17 @@ export const localsMiddlewares = (req, res, next) => {
 };
 
 export const privateOnly = (req, res, next) => {
-  if (!req.session.loggedIn) {
-    return res.redirect("/");
+  if (req.session.loggedIn) {
+    return next();
   }
-  next();
+  return res.redirect("/");
 };
 
 export const publicOnly = (req, res, next) => {
-  if (!req.session.loggedIn) {
-    next();
+  if (req.session.loggedIn) {
+    return res.redirect("/");
   }
-  return res.redirect("/");
+  return next();
 };
 
 export const uploadAvatar = avatarMulter.single("avatar");

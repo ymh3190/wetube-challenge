@@ -184,4 +184,37 @@ export const postEdit = async (req, res) => {
   }
 };
 
+export const getChangePassword = (req, res) => {
+  if (req.session.user.isGithub === true) {
+    return res.redirect("/");
+  }
+  res.render("change-password", { pageTitle: "Change Password" });
+};
+
+export const postChangePassword = async (req, res) => {
+  const {
+    session: {
+      user: { _id },
+    },
+    body: { oldPassword, newPassword, newPassword2 },
+  } = req;
+  const user = await User.findById(_id);
+  const correct = await bcrypt.compare(oldPassword, user.password);
+  if (!correct) {
+    return res.status(400).render("change-password", {
+      pageTitle: "Change Password",
+      errMsg: "기존 비밀번호가 일치하지 않습니다.",
+    });
+  }
+  if (newPassword !== newPassword2) {
+    return res.status(400).render("change-password", {
+      pageTitle: "Change Password",
+      errMsg: "새로운 비밀번호가 일치하지 않습니다.",
+    });
+  }
+  user.password = newPassword;
+  await user.save();
+  return res.redirect("/");
+};
+
 export const see = (req, res) => {};

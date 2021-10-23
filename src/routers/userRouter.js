@@ -1,9 +1,11 @@
 import express from "express";
 import {
   callbackGithubLogin,
+  getChangePassword,
   getEdit,
   githubLogin,
   logout,
+  postChangePassword,
   postEdit,
   see,
 } from "../controllers/userController";
@@ -16,7 +18,11 @@ userRouter
   .all(privateOnly)
   .get(getEdit)
   .post(uploadAvatar, postEdit);
-userRouter.route("/change-password").all(privateOnly);
+userRouter
+  .route("/change-password")
+  .all(privateOnly)
+  .get(getChangePassword)
+  .post(postChangePassword);
 userRouter.get("/github", publicOnly, githubLogin);
 userRouter.get("/github/callback", publicOnly, callbackGithubLogin);
 userRouter.get("/logout", privateOnly, logout);
