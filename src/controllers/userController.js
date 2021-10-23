@@ -142,11 +142,46 @@ export const getEdit = (req, res) =>
   res.render("edit-profile", { pageTitle: "Edit Profile" });
 
 export const postEdit = async (req, res) => {
-  const { username, email } = req.body;
-  const user = await User.findByIdAndUpdate(req.session.user._id, {
-    username,
-    email,
-  });
+  const {
+    session: {
+      user: { _id },
+    },
+    body: { username, email },
+  } = req;
+  // 1. 로그인한 유저와 세션에 저장된 유저와 같은지 체크
+  if (req.session.user._id === res.locals.user._id) {
+    // 2. 이메일과 유저네임 중복체크
+    let exist = false;
+    if (
+      username === req.session.user.username &&
+      email !== req.session.user.email
+    ) {
+      exist = await User.exists({ email });
+    } else if (
+      email === req.session.user.email &&
+      username !== req.session.user.username
+    ) {
+      exist = await User.exists({ username });
+    } else if (
+      username === req.session.user.username &&
+      email === req.session.user.email
+    ) {
+      exist = false;
+    }
+    if (exist) {
+      return res.status(400).render("edit-profile", {
+        pageTitle: "Edit Profile",
+        errMsg: "이메일 혹은 유저네임이 이미 존재합니다.",
+      });
+    }
+    const user = await User.findByIdAndUpdate(
+      _id,
+      { username, email },
+      { new: true }
+    );
+    req.session.user = user;
+    return res.redirect("/users/edit");
+  }
 };
 
 export const see = (req, res) => {};

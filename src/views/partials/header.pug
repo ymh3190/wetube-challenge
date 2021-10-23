@@ -1,12 +1,16 @@
 header.header
     nav
         li
-            a(href="/") Home 
+            a(href="/") Home
+        li 
+            a(href="/search") Search
         if !loggedIn
             li
                 a(href="/signin") Sign In
         else
             li
                 a(href="/users/edit") Edit Profile
+            li
+                a(href="/videos/upload") Upload Video
             li
                 a(href="/users/logout") Logout
