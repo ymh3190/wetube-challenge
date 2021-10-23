@@ -1,10 +1,12 @@
 header.header
     nav
         li
-            a(href="/") 홈 
+            a(href="/") Home 
         if !loggedIn
             li
-                a(href="/signin") 로그인
+                a(href="/signin") Sign In
         else
             li
-                a(href="/users/logout") 로그아웃
+                a(href="/users/edit") Edit Profile
+            li
+                a(href="/users/logout") Logout
