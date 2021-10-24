@@ -3,7 +3,7 @@ extends base
 block content
     if errMsg
         span=errMsg
-    if user.isGithub
+    if user.avatarUrl.includes('github')
         img(src=user.avatarUrl, alt="No Avatar" width=400 height=400)
     else
         img(src=`/${user.avatarUrl}`, alt="No Avatar" width=400 height=400)
