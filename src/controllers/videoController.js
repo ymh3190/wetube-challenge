@@ -97,7 +97,7 @@ export const postUpload = async (req, res) => {
     await Video.create({
       title,
       description,
-      fileUrl: file.path,
+      fileUrl: file.location,
       owner: _id,
     });
     return res.redirect("/");
