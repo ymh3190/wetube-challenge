@@ -2,14 +2,38 @@ extends base
 include videoPlayer
 
 block content
-    #videoContainer
-        video(src="/"+video.fileUrl width=400 height=400)
+    #videoContainer(data-id=video.id)
+        video(src="/"+video.fileUrl)
         +videoPlayer(video)
+    div
+        div title: #{video.title}
+        div description: #{video.description}
+        div views : #{video.views}
         div
-            div title: #{video.title}
-            div description: #{video.description}
+            a(href=`/users/${video.owner._id}`)=video.owner.username
+        div createdAt: #{new Date(video.createdAt).toLocaleDateString('ko')}
+    if String(video.owner._id) === user._id
+        div
             a(href=`/videos/${video.id}/edit`) Edit Video &rarr;
+        div
+            a(href=`/videos/${video.id}/delete`) Delete Video &rarr;
+    div#comments
+        ul
+            each comment in video.comments.reverse()
+                li#comment(data-id=comment.id)
+                    i.fas.fa-comment
+                        span=comment.text
+                        if String(comment.owner._id) === user._id
+                            span#deleteBtn ❌
+
+    if loggedIn
+        form#commentForm
+            textarea(cols="30" rows="10" placeholder="Write a comment") 
+            button Add Comment
+
 
 block scripts
     script(src="/assets/js/videoPlayer.js") 
+    if loggedIn
+        script(src="/assets/js/comment.js") 
             

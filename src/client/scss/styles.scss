@@ -1,3 +1,8 @@
 @import "./reset.scss";
 
 @import "./videoPlayer.scss";
+
+video {
+  width: 400px;
+  height: 400px;
+}

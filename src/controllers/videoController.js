@@ -1,4 +1,5 @@
 import Video from "../models/Video";
+import Comment from "../models/Comment";
 
 export const index = async (req, res) => {
   const videos = await Video.find({});
@@ -19,7 +20,10 @@ export const search = async (req, res) => {
 };
 
 export const watch = async (req, res) => {
-  const video = await Video.findById(req.params.id);
+  const video = await Video.findById(req.params.id)
+    .populate("owner")
+    .populate("comments");
+  console.log(video.comments);
   return res.render("watch", { pageTitle: "Watch", video });
 };
 
@@ -82,14 +86,19 @@ export const deleteVideo = async (req, res) => {
 export const getUpload = (req, res) =>
   res.render("upload", { pageTitle: "Upload" });
 export const postUpload = async (req, res) => {
-  const { file } = req;
-  const { title, description, hashtags } = req.body;
+  const {
+    file,
+    body: { title, description },
+    session: {
+      user: { _id },
+    },
+  } = req;
   try {
     await Video.create({
       title,
       description,
       fileUrl: file.path,
-      hashtags,
+      owner: _id,
     });
     return res.redirect("/");
   } catch (err) {
@@ -97,4 +106,45 @@ export const postUpload = async (req, res) => {
       .status(400)
       .render("upload", { pageTitle: "Upload", errMsg: err._message });
   }
+};
+
+export const registerView = async (req, res) => {
+  const {
+    params: { id },
+  } = req;
+  const video = await Video.findById(id);
+  if (!video) {
+    return res.status(400);
+  }
+  video.views += 1;
+  await video.save();
+  return res.status(200);
+};
+
+export const addComment = async (req, res) => {
+  const {
+    params: { id },
+    body: { text },
+    session: { user },
+  } = req;
+  const video = await Video.findById(id);
+  if (!video) {
+    return res.status(400);
+  }
+  const comment = await Comment.create({
+    text,
+    owner: user._id,
+    video: id,
+  });
+  video.comments.push(comment._id);
+  await video.save();
+  return res.status(201).json({ newCommentId: comment._id });
+};
+
+export const deleteComment = async (req, res) => {
+  const {
+    params: { id },
+  } = req;
+  await Comment.findByIdAndRemove({ _id: id });
+  return res.end();
 };

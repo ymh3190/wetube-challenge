@@ -10,6 +10,8 @@ const mute = videoContainer.querySelector("#mute");
 const fullScreen = videoContainer.querySelector("#fullScreen");
 
 let videoVolume = 0.5;
+let removingTimer = null;
+let showingTimer = null;
 
 const handlePlay = () => {
   if (video.paused) {
@@ -76,6 +78,29 @@ const handleFullscreen = () => {
     : "fas fa-compress";
 };
 
+const addShowing = () => videoControls.classList.add("showing");
+const removeShowing = () => videoControls.classList.remove("showing");
+
+const handleMouseMove = () => {
+  if (removingTimer) {
+    clearTimeout(removingTimer);
+  }
+  videoControls.classList.add("showing");
+  removingTimer = setTimeout(removeShowing, 3000);
+};
+
+const handleMouseLeave = () =>
+  (removingTimer = setTimeout(removeShowing, 3000));
+
+const handleEnded = async () => {
+  const {
+    dataset: { id },
+  } = videoContainer;
+  await fetch(`/api/videos/${id}/view`, {
+    method: "post",
+  });
+};
+
 const init = () => {
   play.addEventListener("click", handlePlay);
   mute.addEventListener("click", handleMute);
@@ -88,6 +113,9 @@ const init = () => {
   }
   timeline.addEventListener("input", handleTimeline);
   fullScreen.addEventListener("click", handleFullscreen);
+  videoContainer.addEventListener("mousemove", handleMouseMove);
+  videoContainer.addEventListener("mouseleave", handleMouseLeave);
+  video.addEventListener("ended", handleEnded);
 };
 
 if (videoContainer) {
