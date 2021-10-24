@@ -144,9 +144,10 @@ export const getEdit = (req, res) =>
 export const postEdit = async (req, res) => {
   const {
     session: {
-      user: { _id },
+      user: { _id, avatarUrl },
     },
     body: { username, email },
+    file,
   } = req;
   // 1. 로그인한 유저와 세션에 저장된 유저와 같은지 체크
   if (req.session.user._id === res.locals.user._id) {
@@ -176,7 +177,7 @@ export const postEdit = async (req, res) => {
     }
     const user = await User.findByIdAndUpdate(
       _id,
-      { username, email },
+      { username, email, avatarUrl: file ? file.path : avatarUrl },
       { new: true }
     );
     req.session.user = user;

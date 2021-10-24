@@ -1,8 +1,5 @@
 import multer from "multer";
 
-const avatarMulter = multer({ dest: "uploads/images" });
-const videoMulter = multer({ dest: "uploads/videos" });
-
 export const localsMiddlewares = (req, res, next) => {
   res.locals.siteName = "WeTube";
   res.locals.loggedIn = Boolean(req.session.loggedIn);
@@ -24,5 +21,11 @@ export const publicOnly = (req, res, next) => {
   return next();
 };
 
-export const uploadAvatar = avatarMulter.single("avatar");
-export const uploadVideo = videoMulter.single("video");
+export const avatarMulter = multer({
+  dest: "uploads/avatars",
+  limits: { fileSize: 2000000 },
+});
+export const videoMulter = multer({
+  dest: "uploads/videos",
+  limits: { fileSize: 10000000 },
+});

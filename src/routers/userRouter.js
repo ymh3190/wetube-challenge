@@ -9,7 +9,7 @@ import {
   postEdit,
   see,
 } from "../controllers/userController";
-import { privateOnly, publicOnly, uploadAvatar } from "../middlewares";
+import { avatarMulter, privateOnly, publicOnly } from "../middlewares";
 
 const userRouter = express.Router();
 
@@ -17,7 +17,7 @@ userRouter
   .route("/edit")
   .all(privateOnly)
   .get(getEdit)
-  .post(uploadAvatar, postEdit);
+  .post(avatarMulter.single("avatar"), postEdit);
 userRouter
   .route("/change-password")
   .all(privateOnly)
