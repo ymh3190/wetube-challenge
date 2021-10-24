@@ -4,7 +4,7 @@ html(lang="ko")
         meta(charset="UTF-8")
         meta(http-equiv="X-UA-Compatible", content="IE=edge")
         meta(name="viewport", content="width=device-width, initial-scale=1.0")
-        link(rel="stylesheet" href="https://unpkg.com/mvp.css")
+        link(rel="stylesheet", href="/assets/css/styles.css")
         link(rel="icon" href="data:;base64,iVBORw0KGgo=")
         if pageTitle
             title #{pageTitle} - #{siteName}
@@ -16,3 +16,5 @@ html(lang="ko")
             block content
         include partials/footer
         script(src="https://kit.fontawesome.com/baa94097a5.js" crossorigin="anonymous")
+        script(src="/assets/js/main.js") 
+        block scripts

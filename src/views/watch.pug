@@ -1,7 +1,15 @@
 extends base
+include videoPlayer
 
 block content
-    video(src="/"+video.fileUrl width=800 height=400 controls)
-    div title: #{video.title}
-    div description: #{video.description}
-    a(href=`/videos/${video.id}/edit`) Edit Video &rarr;
+    #videoContainer
+        video(src="/"+video.fileUrl width=400 height=400)
+        +videoPlayer(video)
+        div
+            div title: #{video.title}
+            div description: #{video.description}
+            a(href=`/videos/${video.id}/edit`) Edit Video &rarr;
+
+block scripts
+    script(src="/assets/js/videoPlayer.js") 
+            

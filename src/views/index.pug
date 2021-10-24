@@ -1,6 +1,7 @@
 extends base
 
 block content
-    each video in videos
-        a(href=`/videos/${video.id}`) 
-            video(src=video.fileUrl width=300 height=200)
+    div(style="display: grid; grid-template-columns: repeat(4, 1fr);")
+        each video in videos
+            a(href=`/videos/${video.id}`) 
+                video(src=video.fileUrl width=400 height=400)
