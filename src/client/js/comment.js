@@ -14,6 +14,7 @@ const addComment = (text, id) => {
   span.innerText = ` ${text}`;
   const span2 = document.createElement("span");
   span2.innerText = "❌";
+  span2.addEventListener("click", handleDelete);
   newComment.appendChild(icon);
   newComment.appendChild(span);
   newComment.appendChild(span2);
@@ -35,13 +36,13 @@ const handleSubmit = async (e) => {
   });
   if (response.status === 201) {
     textarea.value = "";
-    const { newComment } = await response.json();
-    addComment(text, newComment);
+    const { newCommentId } = await response.json();
+    addComment(text, newCommentId);
   }
 };
 
 const handleDelete = async (e) => {
-  const comment = e.target.parentElement.parentElement;
+  const comment = e.target.parentElement;
   const { id } = comment.dataset;
   await fetch(`/api/comments/${id}/delete`, {
     method: "delete",

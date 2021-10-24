@@ -22,9 +22,9 @@ block content
             each comment in video.comments.reverse()
                 li#comment(data-id=comment.id)
                     i.fas.fa-comment
-                        span=comment.text
-                        if String(comment.owner._id) === user._id
-                            span#deleteBtn ❌
+                    span=comment.text
+                    if String(comment.owner._id) === user._id
+                        span#deleteBtn ❌
 
     if loggedIn
         form#commentForm
