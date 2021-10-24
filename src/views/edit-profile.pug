@@ -3,7 +3,10 @@ extends base
 block content
     if errMsg
         span=errMsg
-    img(src=`/${user.avatarUrl}`, alt="No Avatar" width=400 height=400)
+    if user.isGithub
+        img(src=user.avatarUrl, alt="No Avatar" width=400 height=400)
+    else
+        img(src=`/${user.avatarUrl}`, alt="No Avatar" width=400 height=400)
     form(method="post" enctype="multipart/form-data") 
         label(for="avatar") Avatar
         input#avatar(type="file", name="avatar" accept="image/*") 
