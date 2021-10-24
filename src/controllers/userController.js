@@ -1,6 +1,7 @@
 import User from "../models/User";
 import fetch from "node-fetch";
 import bcrypt from "bcrypt";
+import { heroku } from "../middlewares";
 
 export const getSignup = (req, res) =>
   res.render("signup", { pageTitle: "회원가입" });
@@ -177,7 +178,11 @@ export const postEdit = async (req, res) => {
     }
     const user = await User.findByIdAndUpdate(
       _id,
-      { username, email, avatarUrl: file ? file.location : avatarUrl },
+      {
+        username,
+        email,
+        avatarUrl: file ? (heroku ? file.location : file.path) : avatarUrl,
+      },
       { new: true }
     );
     req.session.user = user;

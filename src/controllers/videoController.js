@@ -1,5 +1,6 @@
 import Video from "../models/Video";
 import Comment from "../models/Comment";
+import { heroku } from "../middlewares";
 
 export const index = async (req, res) => {
   const videos = await Video.find({});
@@ -96,7 +97,7 @@ export const postUpload = async (req, res) => {
     await Video.create({
       title,
       description,
-      fileUrl: file.location,
+      fileUrl: heroku ? file.location : file.path,
       owner: _id,
     });
     return res.redirect("/");

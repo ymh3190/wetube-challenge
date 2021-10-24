@@ -9,11 +9,19 @@ const s3 = new aws.S3({
   },
 });
 
-const multerUploader = multers3({
+const s3AvatarMulter = multers3({
   s3: s3,
-  bucket: "wetube-challenge-ymh3190",
+  bucket: "wetube-challenge-ymh3190/avatars",
   acl: "public-read",
 });
+
+const s3VideoMulter = multers3({
+  s3: s3,
+  bucket: "wetube-challenge-ymh3190/videos",
+  acl: "public-read",
+});
+
+export const heroku = process.env.NODE_ENV === "production";
 
 export const localsMiddlewares = (req, res, next) => {
   res.locals.siteName = "WeTube";
@@ -39,10 +47,10 @@ export const publicOnly = (req, res, next) => {
 export const avatarMulter = multer({
   dest: "uploads/avatars",
   limits: { fileSize: 2000000 },
-  storage: multerUploader,
+  storage: heroku ? s3AvatarMulter : undefined,
 });
 export const videoMulter = multer({
   dest: "uploads/videos",
   limits: { fileSize: 20000000 },
-  storage: multerUploader,
+  storage: heroku ? s3VideoMulter : undefined,
 });
